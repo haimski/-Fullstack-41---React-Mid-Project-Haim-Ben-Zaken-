@@ -29,29 +29,30 @@ const UserComponent = ({
                 <div className="row">
                     <label htmlFor="">Street:</label>
                     <span className="frm-row input">
-                        <input type="text" defaultValue={user.email} />
+                        <input type="text" defaultValue={user.address.street} />
                     </span>
                 </div>
                 <div className="row">
                     <label htmlFor="">City:</label>
                     <span className="frm-row input">
-                        <input type="text" defaultValue={user.email} />
+                        <input type="text" defaultValue={user.address.city} />
                     </span>
                 </div>
                 <div className="row">
                     <label htmlFor="">Zip Code:</label>
                     <span className="frm-row input">
-                        <input type="text" defaultValue={user.email} />
+                        <input type="text" defaultValue={user.address.zipcode} />
                     </span>
                 </div>
             </div> : null}
             <div className="row buttons-row">
                 <div>
                     <span>
-                        <button onClick={() => setIsOtherData(!isOtherData)}>Other Data</button>
+                        <button onClick={() => setIsOtherData(!isOtherData)}>
+                            {!isOtherData ? 'Other Data' : 'Close'}
+                        </button>
                     </span>
                 </div>
-
                 <div>
                     <span>
                         <button>Update</button>
