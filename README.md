@@ -1,1 +1,1 @@
-# -Full Stack 41 – React Mid project – Haim Ben-Zaken-
+# Full Stack 41 – React Mid project – Haim Ben-Zaken
