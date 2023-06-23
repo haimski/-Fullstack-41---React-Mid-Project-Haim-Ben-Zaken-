@@ -7,7 +7,13 @@ function App() {
 
   return (
     <>
+    <div className='left-col'>
       <UsersComponent />
+    </div>
+    <div className='right-col'>
+
+    </div>
+      
     </>
   )
 }

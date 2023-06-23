@@ -3,43 +3,77 @@
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
-}
-
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-  &:hover {
-    filter: drop-shadow(0 0 2em #646cffaa);
+  display: grid;
+  grid-template-columns: auto auto auto auto auto;
+  gap: 10px;
+  div {
+    //border: 1px solid;
   }
-
-  &.react {
-    &:hover {
-      filter: drop-shadow(0 0 2em #61dafbaa);
+  .left-col {
+    .users-panel {
+      text-align-last: left;
+      border-radius: 50px;
+      border: 1px solid;
+      padding: 0 0 1.5em 0;
+      .filter-user {
+        width: 300px;
+        margin: 1em auto;
+        label {
+          width: 60px;
+          display: inline-block;
+          font-weight: bold;
+        }
+        button {
+          margin-left: .6em;
+        }
+      }
+      .user {
+        margin: 1em .6em;
+        border: 1px solid;
+        padding:  0 1em 1em;
+        .row {
+          padding: .2em .6em;
+          &:first-child {
+            label {
+               width: auto;
+            }
+          }
+          label {
+            width: 60px;
+            display: inline-block;
+            font-weight: bold;
+          }
+          &.other-data {
+            border: 1px solid;
+            border-radius: 20px;
+            width: 80%;
+            padding: 1em;
+            margin: 1em 0;
+            background-color: #eee;
+            .row {
+                label {
+                  width: 80px;
+                }
+            }
+          }
+        }
+        .buttons-row {
+          display: grid;
+          grid-template-columns: auto auto;
+          span {
+            &:last-child {
+              button {
+                margin-left: .6em;
+              }
+            }
+          }
+        }
+      }
     }
   }
-}
-
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
+  .right-col {
+    grid-column-start: 2;
+    grid-column-end: 6;
   }
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
-}
-
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
-}
