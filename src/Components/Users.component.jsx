@@ -11,7 +11,7 @@ function UsersComponent() {
   useEffect(() => {
     const getUsers = async () => {
         const {data: usersData} = await getAllUsers(userServiceUrl);
-        
+
         setUsers(usersData);
         setFilteredUsers(usersData);
     };

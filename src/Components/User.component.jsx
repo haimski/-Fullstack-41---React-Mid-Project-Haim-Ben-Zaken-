@@ -4,13 +4,20 @@ const UserComponent = ({
     user
 }) => {
     const [isOtherData, setIsOtherData] = useState(false);
+    const [isUserSelected, setIsUserSelected] = useState(false);
+
+    const getUserData = () => {
+        setIsUserSelected(!isUserSelected);
+    }
 
     return (
-        <div className="user">
+        <div className="user" style={{'backgroundColor': isUserSelected ? 'aliceblue' : ''}}>
             <div className="row">
-                <label htmlFor="">ID:</label>
-                <span className="frm-row input">
-                    {user.id}
+                <span className="user-id-btn" onClick={getUserData}>
+                    <label htmlFor="">ID:</label>
+                    <span className="frm-row input">
+                        {user.id}
+                    </span>
                 </span>
             </div>
             <div className="row">
