@@ -92,6 +92,63 @@
   .right-col {
     grid-column-start: 2;
     grid-column-end: 6;
+    .user-data-panel {
+      text-align: left;
+      .user-items {
+        &.set-border {
+          .user-items-list {
+            border: 1px solid;
+          }
+        }
+        &-title {
+          padding: 1em;
+          div.title-row {
+            display: grid;
+            grid-template-columns: auto auto;
+            span {
+              &:last-child {
+                text-align: right;
+              }
+            }
+          }
+        }
+        &-list {
+          padding: 1em;
+          &-item {
+            border: 1px solid;
+            padding: 1em;
+            display: grid;
+            grid-template-columns: auto auto auto;
+            margin-bottom: 1em;
+            &:last-child {
+              margin-bottom: 0;
+            }
+            &-title, &-status {
+              grid-column-start:1;
+              grid-column-end:3;
+              span {
+                &:first-child {
+                  display: inline-block;
+                  width: 100px;
+                }
+                &:last-child {
+                  text-overflow: ellipsis;
+                  white-space: nowrap;
+                  overflow: hidden;
+                  display: inline-block;
+                  width: 150px;
+                }
+              }
+            }
+            &-status-btn {
+              text-align: right;
+            }
+            &.post {
+              grid-template-columns: auto auto;
+            }
+          }
+        }
+      }
+    }
   }
 }
-

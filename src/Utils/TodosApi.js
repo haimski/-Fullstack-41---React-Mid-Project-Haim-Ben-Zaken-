@@ -1,16 +1,19 @@
 import axios from "axios";
 
-const getAllTasks = (url) => axios.get(url);
+const getAllTodos = (url) => axios.get(url);
 
-const getTaskById = (url, id) => axios.get(`${url}/${id}`);
+const getTodoById = (url, id) => axios.get(`${url}/${id}`);
 
-const updateTask = (url, id) => axios.put(`${url}/${id}`);
+const getTodoByUserId = (url, userId) => axios.get(`${url}?userId=${userId}`);
 
-const deleteTask = (url, id) => axios.delete(`${url}/${id}`);
+const updateTodo = (url, id, data) => axios.put(`${url}/${id}`, data);
+
+const deleteTodo = (url, id) => axios.delete(`${url}/${id}`);
 
 export {
-    getAllTasks,
-    getTaskById,
-    updateTask,
-    deleteTask
+    getAllTodos,
+    getTodoById,
+    getTodoByUserId,
+    updateTodo,
+    deleteTodo
 }
