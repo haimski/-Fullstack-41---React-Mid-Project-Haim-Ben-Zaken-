@@ -1,3 +1,4 @@
+import { uniqueId } from "lodash";
 const PostsComponent = ({currentUser, posts}) => {
 
     return (
@@ -13,7 +14,7 @@ const PostsComponent = ({currentUser, posts}) => {
                                 posts && posts.map((post, index) => {
                                     if (index < 3) {
                                         return (
-                                            <li className="user-items-list-item post" key={index}>
+                                            <li className="user-items-list-item post" key={uniqueId('post-')}>
                                                 <div className="user-items-list-item-title post-title">
                                                     <span>Title:</span>
                                                     <span>{post.title}</span>

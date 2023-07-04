@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { uniqueId } from 'lodash';
 import { getAllUsers } from '../Utils/UsersApi'
 import { getTodoByUserId } from '../Utils/TodosApi';
 import { getPostByUserId } from '../Utils/PostsApi';
@@ -25,9 +26,10 @@ function UsersComponent() {
         setFilteredUsers(usersData);
     };
     getUsers();
-  });
+  }, []);
 
   const getFilteredUsers = (e) => {
+    console.log(e.target.value);
     const searchStr = e.target.value;
     setSearchInput(searchStr.toLowerCase());
     if (searchInput != '') {
@@ -56,6 +58,10 @@ function UsersComponent() {
     setUserPosts(userPostsData);
   }
 
+  const removeUser = (userId) => {
+    setFilteredUsers(filteredUsers.filter(user => user.id !== userId));
+  }
+
   return (
     <>
     <div className='left-col'>
@@ -72,7 +78,7 @@ function UsersComponent() {
                     return (
                         <UserComponent 
                             user={user} 
-                            key={index} 
+                            key={uniqueId('user-')} 
                             getTodoDataByUserId={getTodoDataByUserId}
                             getPostsDataByUserId={getPostsDataByUserId}
                             selectedUserId={selectedUserId}
@@ -81,7 +87,8 @@ function UsersComponent() {
                             currentUser={currentUser}
                             setShowRightPanel={setShowRightPanel}
                             showRightPanel={showRightPanel}
-                            userTodos={userTodos} />
+                            userTodos={userTodos}
+                            removeUser={removeUser} />
                     )
                 })
             }
@@ -89,7 +96,24 @@ function UsersComponent() {
     </div>
     <div className='right-col'>
             {showRightPanel && <div className="user-data-panel">
-                {currentUser &&<TodosComponent currentUser={currentUser} todos={userTodos} />}
+            <div className={userTodos.length > 0 ? 'user-items set-border' : 'user-items'}>
+                    <div className="user-items-title">
+                        <div className="title-row">
+                            <span>Todos - User {currentUser && currentUser.id}</span>
+                            <span><button>Add</button></span>
+                        </div>
+                        <ul className="user-items-list">{
+                        userTodos && userTodos.map((task, index) => {
+                                    if (index < 3) {
+                                        return <TodosComponent task={task} key={index} />
+                                    } else {
+                                        return null
+                                    }
+                                })
+                            }
+                        </ul>
+                    </div>
+                </div>
                 {currentUser && <PostsComponent currentUser={currentUser} posts={userPosts} />}
             </div>}
     </div>

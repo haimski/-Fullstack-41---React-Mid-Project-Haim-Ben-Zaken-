@@ -11,7 +11,8 @@ const UserComponent = ({
     setCurrentUser,
     currentUser,
     setShowRightPanel,
-    userTodos
+    userTodos,
+    removeUser
 }) => {
     const [isOtherData, setIsOtherData] = useState(false);
     const [userName, setUserName] = useState(user.name);
@@ -52,9 +53,11 @@ const UserComponent = ({
         console.log(data);
     }
 
-    const deleteCurrentUser = async () => {
+    const deleteCurrentUser = async (e) => {
+        console.log(e)
         const { data } = await deleteUser(userServiceUrl, user.id);
         console.log(data);
+        removeUser(user.id);
     }
 
     const isUserHasUncompletedTasks = () => {
@@ -118,7 +121,7 @@ const UserComponent = ({
                 <div>
                     <span>
                         <button onClick={updateUserDetails}>Update</button>
-                        <button onClick={deleteCurrentUser}>Delete</button>
+                        <button onClick={(e) => deleteCurrentUser(e)}>Delete</button>
                     </span>
                 </div>
             </div>
