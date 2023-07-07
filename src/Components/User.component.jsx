@@ -11,8 +11,9 @@ const UserComponent = ({
     setCurrentUser,
     currentUser,
     setShowRightPanel,
-    userTodos,
-    removeUser
+    isUserHasUncompletedTasks,
+    removeUser,
+    setShowAddTodoForm
 }) => {
     const [isOtherData, setIsOtherData] = useState(false);
     const [userName, setUserName] = useState(user.name);
@@ -58,10 +59,6 @@ const UserComponent = ({
         const { data } = await deleteUser(userServiceUrl, user.id);
         console.log(data);
         removeUser(user.id);
-    }
-
-    const isUserHasUncompletedTasks = () => {
-        return userTodos.find(task => task.completed === false);
     }
 
     return (

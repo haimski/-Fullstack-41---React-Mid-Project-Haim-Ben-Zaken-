@@ -17,6 +17,9 @@ function UsersComponent() {
     const [userPosts, setUserPosts] = useState([]);
     const [currentUser, setCurrentUser] = useState(null);
     const [showRightPanel, setShowRightPanel] = useState(false);
+    const [showAddUserForm, setShowAddUserForm] = useState(false);
+    const [showAddTodoForm, setShowAddTodoForm] = useState(false);
+    const [showAddPostForm, setShowAddPostForm] = useState(false);
 
   useEffect(() => {
     const getUsers = async () => {
@@ -58,8 +61,28 @@ function UsersComponent() {
     setUserPosts(userPostsData);
   }
 
+  const isUserHasUncompletedTasks = () => {
+    return userTodos.find(task => task.completed === false);
+  }
+
   const removeUser = (userId) => {
     setFilteredUsers(filteredUsers.filter(user => user.id !== userId));
+  }
+
+  const handleAddUserSubmit = () => {
+
+  }
+
+  const handleAddTodoSubmit = () => {
+
+  }
+
+  const handleAddPostSubmit = () => {
+
+  }
+
+  const toggleNewPostForm = () => {
+    setShowAddPostForm(!showAddPostForm);
   }
 
   return (
@@ -71,7 +94,7 @@ function UsersComponent() {
                 <span>
                     <input type="text" onInput={(e) => getFilteredUsers(e)} />
                 </span>
-                <button>Add</button>
+                <button onClick={() => setShowAddUserForm(!showAddUserForm)}>Add</button>
             </div>
             {
                 filteredUsers.map((user, index) => {
@@ -88,19 +111,52 @@ function UsersComponent() {
                             setShowRightPanel={setShowRightPanel}
                             showRightPanel={showRightPanel}
                             userTodos={userTodos}
-                            removeUser={removeUser} />
+                            isUserHasUncompletedTasks={isUserHasUncompletedTasks}
+                            removeUser={removeUser}
+                            setShowAddTodoForm={setShowAddTodoForm} />
                     )
                 })
             }
         </div>
     </div>
     <div className='right-col'>
-            {showRightPanel && <div className="user-data-panel">
-            <div className={userTodos.length > 0 ? 'user-items set-border' : 'user-items'}>
+            {showAddUserForm && <div className='add-user-form'>
+                <div className="title">Add User</div>
+                <form onSubmit={() => handleAddUserSubmit()} className="add-user-form_form">
+                    <div className="row">
+                        <label htmlFor="name">Name:</label>
+                        <input type="text" name='name' />
+                    </div>
+                    <div className="row">
+                        <label htmlFor="email">Email:</label>
+                        <input type="text" name='email' />
+                    </div>
+                    <div className="row buttons">
+                        <input type="button" value="Cancel" onClick={() => setShowAddUserForm(false)} />
+                        <input type="submit" value="Add" />
+                    </div>
+                </form>
+            </div>}
+            {showRightPanel &&
+            <div className="user-data-panel">
+                {showAddTodoForm && <div className='add-todo-form'>
+                <div className="title">New Todo - User {currentUser && currentUser.id}</div>
+                    <form onSubmit={handleAddTodoSubmit} className="add-user-form_form">
+                        <div className="row">
+                            <label htmlFor="title">Title</label>
+                            <input type="text" name="title" />
+                        </div>
+                        <div className="row buttons">
+                            <input type="button" value="Cancel" onClick={() => setShowAddTodoForm(false)} />
+                            <input type="submit" value="Add" />
+                        </div>
+                    </form>
+                </div>}
+                <div className={userTodos.length > 0 ? 'user-items set-border' : 'user-items'}>
                     <div className="user-items-title">
                         <div className="title-row">
                             <span>Todos - User {currentUser && currentUser.id}</span>
-                            <span><button>Add</button></span>
+                            <span><button onClick={() => setShowAddTodoForm(!showAddTodoForm)}>Add</button></span>
                         </div>
                         <ul className="user-items-list">{
                         userTodos && userTodos.map((task, index) => {
@@ -114,7 +170,26 @@ function UsersComponent() {
                         </ul>
                     </div>
                 </div>
-                {currentUser && <PostsComponent currentUser={currentUser} posts={userPosts} />}
+                { showAddPostForm &&
+                <div className='add-post-form'>
+                    <div className="title">New Post - User {currentUser && currentUser.id}</div>
+                    <form onSubmit={() => handleAddPostSubmit()} className="add-user-form_form">
+                        <div className="row">
+                            <label htmlFor="name">Name:</label>
+                            <input type="text" name='name' />
+                        </div>
+                        <div className="row">
+                            <label htmlFor="email">Email:</label>
+                            <input type="text" name='email' />
+                        </div>
+                        <div className="row buttons">
+                            <input type="button" value="Cancel" onClick={() => setShowAddPostForm(false)} />
+                            <input type="submit" value="Add" />
+                        </div>
+                    </form>
+                </div>
+                }
+                {currentUser && <PostsComponent currentUser={currentUser} posts={userPosts} toggleNewPostForm={toggleNewPostForm} />}
             </div>}
     </div>
       

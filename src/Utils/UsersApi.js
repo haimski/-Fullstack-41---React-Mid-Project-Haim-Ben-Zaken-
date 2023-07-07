@@ -8,6 +8,8 @@ const updateUser = (url, id, data) => axios.put(`${url}/${id}`, data);
 
 const deleteUser = (url, id) => axios.delete(`${url}/${id}`);
 
+const addUser = (url, obj) => axios.post(url, obj);
+
 export {
     getAllUsers,
     getAllUsersById,

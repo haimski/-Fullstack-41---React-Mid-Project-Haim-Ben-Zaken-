@@ -92,8 +92,39 @@
   .right-col {
     grid-column-start: 2;
     grid-column-end: 6;
+    .add-user-form {
+      padding: 1em;
+      .title {
+        text-align: left;
+        padding-bottom: .5em
+      }
+      &_form {
+        border: 1px solid;
+        padding: 1em;
+        text-align: left;
+        .row {
+          label {
+            width: 100px;
+            display: inline-block;
+          }
+          &.buttons {
+            margin-top: 1em;
+            text-align: right;
+            input {
+              margin-left: .5em;
+            }
+          }
+        }
+      }
+    }
     .user-data-panel {
       text-align: left;
+      .add-todo-form {
+        @extend .add-user-form;
+      }
+      .add-post-form {
+        @extend .add-user-form;
+      }
       .user-items {
         &.set-border {
           .user-items-list {

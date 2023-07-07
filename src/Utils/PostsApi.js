@@ -10,10 +10,13 @@ const updatePost = (url, id, data) => axios.put(`${url}/${id}`, data);
 
 const deletePost = (url, id) => axios.delete(`${url}/${id}`);
 
+const addPost = (url, obj) => axios.post(url, obj);
+
 export {
     getAllPosts,
     getPostById,
     getPostByUserId,
     updatePost,
-    deletePost
+    deletePost,
+    addPost
 }

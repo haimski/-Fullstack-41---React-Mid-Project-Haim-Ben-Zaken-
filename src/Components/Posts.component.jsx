@@ -1,5 +1,9 @@
 import { uniqueId } from "lodash";
-const PostsComponent = ({currentUser, posts}) => {
+const PostsComponent = ({
+        currentUser, 
+        posts, 
+        toggleNewPostForm
+    }) => {
 
     return (
         <>
@@ -7,7 +11,7 @@ const PostsComponent = ({currentUser, posts}) => {
                     <div className="user-items-title">
                         <div className="title-row">
                             <span>Posts - User {currentUser && currentUser.id}</span>
-                            <span><button>Add</button></span>
+                            <span><button onClick={() => toggleNewPostForm()}>Add</button></span>
                         </div>
                         <ul className={posts.length > 0 ? 'user-items-list set-border' : 'user-items-list'}>
                             {
