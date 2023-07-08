@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
 import { uniqueId } from 'lodash';
-import { getAllUsers } from '../Utils/UsersApi'
-import { getTodoByUserId } from '../Utils/TodosApi';
-import { getPostByUserId } from '../Utils/PostsApi';
+import { getAllUsers, addUser } from '../Utils/UsersApi';
+import { getTodoByUserId, addTodo } from '../Utils/TodosApi';
+import { getPostByUserId, addPost } from '../Utils/PostsApi';
 import { userServiceUrl, todosServiceUrl, postsServiceUrl } from '../Utils/Consts'
 import UserComponent from './User.component';
 import TodosComponent from './Todos.component';
@@ -20,6 +20,9 @@ function UsersComponent() {
     const [showAddUserForm, setShowAddUserForm] = useState(false);
     const [showAddTodoForm, setShowAddTodoForm] = useState(false);
     const [showAddPostForm, setShowAddPostForm] = useState(false);
+    const [newUser, setNewUser] = useState({});
+    const [newTodo, setNewTodo] = useState({});
+    const [newPost, setNewPost] = useState({});
 
   useEffect(() => {
     const getUsers = async () => {
@@ -30,6 +33,10 @@ function UsersComponent() {
     };
     getUsers();
   }, []);
+
+  useEffect(() => {
+    console.log(userTodos);
+  }, [userTodos])
 
   const getFilteredUsers = (e) => {
     console.log(e.target.value);
@@ -50,14 +57,12 @@ function UsersComponent() {
   // get todos by user id
   const getTodoDataByUserId = async (userId) => {
     const {data: userTodosData} = await getTodoByUserId(todosServiceUrl, userId);
-    //console.log(userTodosData);
     setUserTodos(userTodosData);
   }
 
   // get post by user id
   const getPostsDataByUserId = async (userId) => {
     const {data: userPostsData} = await getPostByUserId(postsServiceUrl, userId);
-    //console.log(userPostsData);
     setUserPosts(userPostsData);
   }
 
@@ -69,16 +74,41 @@ function UsersComponent() {
     setFilteredUsers(filteredUsers.filter(user => user.id !== userId));
   }
 
-  const handleAddUserSubmit = () => {
+  const updateTaskStatusState = (task) => {
+    //const currentTask = userTodos.find(todo => task.id === todo.id);
+    userTodos.forEach((todo) => {
+        if (todo.id === task.id) {
+            todo.completed = task.completed;
+        }
+    })
 
+    console.log(userTodos)
   }
 
-  const handleAddTodoSubmit = () => {
-
+  const handleAddUserSubmit = async (e) => {
+    e.preventDefault();
+    const {data: newUserData} = await addUser(userServiceUrl, newUser);
+    setUsers([...users, newUserData]);
+    setFilteredUsers([...users, newUserData]);
+    console.log(users);
   }
 
-  const handleAddPostSubmit = () => {
+  const handleAddTodoSubmit = async (e) => {
+    e.preventDefault();
+    const {data: newTodoData} = await addTodo(userServiceUrl, newTodo);
+    console.log(newTodoData);
+    setUserTodos([{
+        userId: currentUser.id,
+        id: userTodos.length,
+        title: newTodoData.title,
+        completed: false
+    }, ...userTodos]);
+  }
 
+  const handleAddPostSubmit = async (e) => {
+    e.preventDefault();
+    const {data: newPostData} = await addPost(userServiceUrl, newPost);
+    setUserPosts([newPostData, ...userPosts]);
   }
 
   const toggleNewPostForm = () => {
@@ -122,17 +152,17 @@ function UsersComponent() {
     <div className='right-col'>
             {showAddUserForm && <div className='add-user-form'>
                 <div className="title">Add User</div>
-                <form onSubmit={() => handleAddUserSubmit()} className="add-user-form_form">
+                <form onSubmit={handleAddUserSubmit} className="add-user-form_form">
                     <div className="row">
                         <label htmlFor="name">Name:</label>
-                        <input type="text" name='name' />
+                        <input type="text" name='name' onInput={(e) => setNewUser({...newUser, name: e.target.value})} />
                     </div>
                     <div className="row">
                         <label htmlFor="email">Email:</label>
-                        <input type="text" name='email' />
+                        <input type="text" name='email' onInput={(e) => setNewUser({...newUser, email: e.target.value})} />
                     </div>
                     <div className="row buttons">
-                        <input type="button" value="Cancel" onClick={() => setShowAddUserForm(false)} />
+                        <input type="button" value="Cancel" onClick={(e) => setShowAddUserForm(false)} />
                         <input type="submit" value="Add" />
                     </div>
                 </form>
@@ -144,7 +174,7 @@ function UsersComponent() {
                     <form onSubmit={handleAddTodoSubmit} className="add-user-form_form">
                         <div className="row">
                             <label htmlFor="title">Title</label>
-                            <input type="text" name="title" />
+                            <input type="text" name="title" onInput={(e) => setNewTodo({...newTodo, title: e.target.value})}/>
                         </div>
                         <div className="row buttons">
                             <input type="button" value="Cancel" onClick={() => setShowAddTodoForm(false)} />
@@ -161,7 +191,7 @@ function UsersComponent() {
                         <ul className="user-items-list">{
                         userTodos && userTodos.map((task, index) => {
                                     if (index < 3) {
-                                        return <TodosComponent task={task} key={index} />
+                                        return <TodosComponent task={task} key={index} updateTaskStatusState={updateTaskStatusState} />
                                     } else {
                                         return null
                                     }
@@ -173,14 +203,14 @@ function UsersComponent() {
                 { showAddPostForm &&
                 <div className='add-post-form'>
                     <div className="title">New Post - User {currentUser && currentUser.id}</div>
-                    <form onSubmit={() => handleAddPostSubmit()} className="add-user-form_form">
+                    <form onSubmit={handleAddPostSubmit} className="add-user-form_form">
                         <div className="row">
-                            <label htmlFor="name">Name:</label>
-                            <input type="text" name='name' />
+                            <label htmlFor="title">Title:</label>
+                            <input type="text" name='title' onInput={(e) => setNewPost({...newPost, title: e.target.value})} />
                         </div>
                         <div className="row">
-                            <label htmlFor="email">Email:</label>
-                            <input type="text" name='email' />
+                            <label htmlFor="body">Body:</label>
+                            <input type="text" name="body" onInput={(e) => setNewPost({...newPost, body: e.target.value})} />
                         </div>
                         <div className="row buttons">
                             <input type="button" value="Cancel" onClick={() => setShowAddPostForm(false)} />

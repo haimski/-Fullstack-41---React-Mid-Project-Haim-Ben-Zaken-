@@ -13,14 +13,18 @@ const UserComponent = ({
     setShowRightPanel,
     isUserHasUncompletedTasks,
     removeUser,
-    setShowAddTodoForm
+    userTodos
 }) => {
     const [isOtherData, setIsOtherData] = useState(false);
     const [userName, setUserName] = useState(user.name);
     const [userEmail, setUserEmail] = useState(user.email);
-    const [userStreet, setUserStreet] = useState(user.address.street);
-    const [userCity, setUserCity] = useState(user.address.city);
-    const [userZipCode, setUserZipCode] = useState(user.address.zipcode);
+    const [userStreet, setUserStreet] = useState(user.address && user.address.street || '');
+    const [userCity, setUserCity] = useState(user.address && user.address.city || '');
+    const [userZipCode, setUserZipCode] = useState(user.address && user.address.zipcode || '');
+
+    useEffect(() => {
+        isUserHasUncompletedTasks();
+    }, [userTodos]);
 
     const toggleUserDetails = (event) => {
         if (!currentUser || (currentUser.id != event.target.innerText)) {
@@ -55,9 +59,7 @@ const UserComponent = ({
     }
 
     const deleteCurrentUser = async (e) => {
-        console.log(e)
         const { data } = await deleteUser(userServiceUrl, user.id);
-        console.log(data);
         removeUser(user.id);
     }
 

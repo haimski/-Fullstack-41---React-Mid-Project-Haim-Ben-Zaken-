@@ -14,5 +14,6 @@ export {
     getAllUsers,
     getAllUsersById,
     updateUser,
-    deleteUser
+    deleteUser,
+    addUser
 }

@@ -137,6 +137,11 @@
             display: grid;
             grid-template-columns: auto auto;
             span {
+              line-height: 40px;
+              padding-bottom: 5px;
+              &:first-child {
+                font-weight: bold;
+              }
               &:last-child {
                 text-align: right;
               }
@@ -151,12 +156,14 @@
             display: grid;
             grid-template-columns: auto auto auto;
             margin-bottom: 1em;
+            line-height: 1;
             &:last-child {
               margin-bottom: 0;
             }
             &-title, &-status {
               grid-column-start:1;
               grid-column-end:3;
+              margin-bottom: .5em;
               span {
                 &:first-child {
                   display: inline-block;
@@ -173,6 +180,11 @@
             }
             &-status-btn {
               text-align: right;
+              .completed {
+                color: white;
+                background-color: green;
+                border-color: white;
+              }
             }
             &.post {
               grid-template-columns: auto auto;

@@ -1,26 +1,31 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { updateTodo } from "../Utils/TodosApi";
 import { todosServiceUrl } from "../Utils/Consts";
 
 const TodosComponent = ({
-        task
+        task,
+        updateTaskStatusState
     }) => {
-        const [taskStatus, setTaskstatus] = useState(task.completed)
+        const [taskStatus, setTaskstatus] = useState(task.completed);
+
+        useEffect(() => {
+            setTaskstatus(task.completed);
+        }, [task])
 
     const updateTaskStatus = async (task) => {
         const dataToUpdate = {
             completed: true
         }
         const {data} = await updateTodo(todosServiceUrl, task.id, dataToUpdate);
-        console.log(data);
         setTaskstatus(data.completed);
+        updateTaskStatusState(data)
     }
 
     return (
             <>
                 <li className="user-items-list-item">
                     <div className="user-items-list-item-title">
-                        <span>Title:</span>
+                        <span>Title: {task.id}</span>
                         <span>{task.title}</span>
                     </div>
                     <div className="user-items-list-item-status">
@@ -28,7 +33,7 @@ const TodosComponent = ({
                         <span>{taskStatus.toString()}</span>
                     </div>
                     <div className="user-items-list-item-status-btn">
-                        <button onClick={() => updateTaskStatus(task)}>Mark Completed</button>
+                        <button className={taskStatus ? 'completed' : ''} onClick={() => updateTaskStatus(task)}>Mark Completed</button>
                     </div>
                 </li>
             </>
