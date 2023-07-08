@@ -23,6 +23,7 @@ function UsersComponent() {
     const [newUser, setNewUser] = useState({});
     const [newTodo, setNewTodo] = useState({});
     const [newPost, setNewPost] = useState({});
+    const [isUserTasksUncompleted, setIsUserTasksUncompleted] = useState(false);
 
   useEffect(() => {
     const getUsers = async () => {
@@ -35,11 +36,10 @@ function UsersComponent() {
   }, []);
 
   useEffect(() => {
-    console.log(userTodos);
+    setIsUserTasksUncompleted(userTodos.find(task => task.completed === false));
   }, [userTodos])
 
   const getFilteredUsers = (e) => {
-    console.log(e.target.value);
     const searchStr = e.target.value;
     setSearchInput(searchStr.toLowerCase());
     if (searchInput != '') {
@@ -54,20 +54,14 @@ function UsersComponent() {
     }
   };
 
-  // get todos by user id
   const getTodoDataByUserId = async (userId) => {
     const {data: userTodosData} = await getTodoByUserId(todosServiceUrl, userId);
     setUserTodos(userTodosData);
   }
 
-  // get post by user id
   const getPostsDataByUserId = async (userId) => {
     const {data: userPostsData} = await getPostByUserId(postsServiceUrl, userId);
     setUserPosts(userPostsData);
-  }
-
-  const isUserHasUncompletedTasks = () => {
-    return userTodos.find(task => task.completed === false);
   }
 
   const removeUser = (userId) => {
@@ -75,14 +69,13 @@ function UsersComponent() {
   }
 
   const updateTaskStatusState = (task) => {
-    //const currentTask = userTodos.find(todo => task.id === todo.id);
     userTodos.forEach((todo) => {
         if (todo.id === task.id) {
             todo.completed = task.completed;
         }
     })
-
-    console.log(userTodos)
+    setUserTodos(userTodos);
+    setIsUserTasksUncompleted(userTodos.find(task => task.completed === false));
   }
 
   const handleAddUserSubmit = async (e) => {
@@ -90,13 +83,11 @@ function UsersComponent() {
     const {data: newUserData} = await addUser(userServiceUrl, newUser);
     setUsers([...users, newUserData]);
     setFilteredUsers([...users, newUserData]);
-    console.log(users);
   }
 
   const handleAddTodoSubmit = async (e) => {
     e.preventDefault();
     const {data: newTodoData} = await addTodo(userServiceUrl, newTodo);
-    console.log(newTodoData);
     setUserTodos([{
         userId: currentUser.id,
         id: userTodos.length,
@@ -127,7 +118,7 @@ function UsersComponent() {
                 <button onClick={() => setShowAddUserForm(!showAddUserForm)}>Add</button>
             </div>
             {
-                filteredUsers.map((user, index) => {
+                filteredUsers.map((user) => {
                     return (
                         <UserComponent 
                             user={user} 
@@ -141,7 +132,7 @@ function UsersComponent() {
                             setShowRightPanel={setShowRightPanel}
                             showRightPanel={showRightPanel}
                             userTodos={userTodos}
-                            isUserHasUncompletedTasks={isUserHasUncompletedTasks}
+                            isUserTasksUncompleted={isUserTasksUncompleted}
                             removeUser={removeUser}
                             setShowAddTodoForm={setShowAddTodoForm} />
                     )
@@ -191,7 +182,7 @@ function UsersComponent() {
                         <ul className="user-items-list">{
                         userTodos && userTodos.map((task, index) => {
                                     if (index < 3) {
-                                        return <TodosComponent task={task} key={index} updateTaskStatusState={updateTaskStatusState} />
+                                        return <TodosComponent task={task} key={uniqueId('todos-')} updateTaskStatusState={updateTaskStatusState} />
                                     } else {
                                         return null
                                     }

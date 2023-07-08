@@ -11,7 +11,7 @@ const UserComponent = ({
     setCurrentUser,
     currentUser,
     setShowRightPanel,
-    isUserHasUncompletedTasks,
+    isUserTasksUncompleted,
     removeUser,
     userTodos
 }) => {
@@ -21,10 +21,6 @@ const UserComponent = ({
     const [userStreet, setUserStreet] = useState(user.address && user.address.street || '');
     const [userCity, setUserCity] = useState(user.address && user.address.city || '');
     const [userZipCode, setUserZipCode] = useState(user.address && user.address.zipcode || '');
-
-    useEffect(() => {
-        isUserHasUncompletedTasks();
-    }, [userTodos]);
 
     const toggleUserDetails = (event) => {
         if (!currentUser || (currentUser.id != event.target.innerText)) {
@@ -55,7 +51,6 @@ const UserComponent = ({
         }
 
         const {data} = await updateUser(userServiceUrl, user.id, userUpdateData);
-        console.log(data);
     }
 
     const deleteCurrentUser = async (e) => {
@@ -63,8 +58,12 @@ const UserComponent = ({
         removeUser(user.id);
     }
 
+    const componentStyle= {
+        'backgroundColor': selectedUserId === user.id ? 'aliceblue' : '', 
+        'borderColor': isUserTasksUncompleted ? 'red' : ''}
+
     return (
-        <div className="user" style={{'backgroundColor': selectedUserId === user.id ? 'aliceblue' : '', 'borderColor': isUserHasUncompletedTasks() ? 'red' : ''}}>
+        <div className="user" style={componentStyle}>
             <div className="row"> 
                 <span className="user-id-btn">
                     <label htmlFor="">ID:</label>

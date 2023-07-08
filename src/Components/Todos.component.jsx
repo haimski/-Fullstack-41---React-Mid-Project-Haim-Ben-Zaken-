@@ -6,10 +6,10 @@ const TodosComponent = ({
         task,
         updateTaskStatusState
     }) => {
-        const [taskStatus, setTaskstatus] = useState(task.completed);
+        const [taskStatus, setTaskStatus] = useState(task.completed);
 
         useEffect(() => {
-            setTaskstatus(task.completed);
+            setTaskStatus(task.completed);
         }, [task])
 
     const updateTaskStatus = async (task) => {
@@ -17,7 +17,7 @@ const TodosComponent = ({
             completed: true
         }
         const {data} = await updateTodo(todosServiceUrl, task.id, dataToUpdate);
-        setTaskstatus(data.completed);
+        setTaskStatus(data.completed);
         updateTaskStatusState(data)
     }
 
@@ -25,7 +25,7 @@ const TodosComponent = ({
             <>
                 <li className="user-items-list-item">
                     <div className="user-items-list-item-title">
-                        <span>Title: {task.id}</span>
+                        <span>Title:</span>
                         <span>{task.title}</span>
                     </div>
                     <div className="user-items-list-item-status">
